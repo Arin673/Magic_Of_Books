@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/common :: head(~{::title}, ~{}, ${_csrf})">
+    <title>New Book</title>
+</head>
+<body>
+<th:block th:replace="admin/fragments/common :: main('', ~{::main})">
+    <main class="col-md-9 ml-sm-auto col-lg-10 px-0" role="main">
+        <div class="container my-3">
+            <form action="#" class="needs-validation" enctype="multipart/form-data" method="post" novalidate
+                  th:action="@{/admin/new-book/add}"
+                  th:object="${bookForm}">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3 mb-3">
+                        <label th:for="${#ids.next('title')}">Title</label>
+                        <input class="form-control" placeholder="" required th:field="*{title}" type="text">
+                        <div class="invalid-feedback">
+                            Title is required
+                        </div>
+                        <div class="server-invalid-feedback"
+                             th:errors="*{title}" th:if="${#fields.hasErrors('title')}">
+                        </div>
+                    </div>
+                    <div class="col-md-6 offset-md-3 mb-3">
+                        <label th:for="${#ids.next('author')}">Author</label>
+                        <input class="form-control" placeholder="" required th:field="*{author}" type="text">
+                        <div class="invalid-feedback">
+                            Author is required
+                        </div>
+                        <div class="server-invalid-feedback"
+                             th:errors="*{author}" th:if="${#fields.hasErrors('author')}">
+                        </div>
+                    </div>
+                    <div class="col-md-6 offset-md-3 mb-3">
+                        <label th:for="${#ids.next('isbn')}">ISBN</label>
+                        <input class="form-control" placeholder="" required th:field="*{isbn}" type="text">
+                        <div class="invalid-feedback">
+                            ISBN is required
+                        </div>
+                        <div class="server-invalid-feedback"
+                             th:errors="*{isbn}" th:if="${#fields.hasErrors('isbn')}">
+                        </div>
+                    </div>
+                    <div class="col-md-6 offset-md-3 mb-3">
+                        <label th:for="${#ids.next('price')}">Price</label>
+                        <input class="form-control" placeholder="" required th:field="*{price}" type="text">
+                        <div class="invalid-feedback">
+                            Price is required
+                        </div>
+                        <div class="server-invalid-feedback"
+                             th:errors="*{price}" th:if="${#fields.hasErrors('price')}">
+                        </div>
+                    </div>
+                    <div class="col-md-6 offset-md-3 mb-3">
+                        <label th:for="${#ids.next('quantity')}">Quantity</label>
+                        <input class="form-control" placeholder="" required th:field="*{quantity}" type="text">
+                        <div class="invalid-feedback">
+                            Quantity is required
+                        </div>
+                        <div class="server-invalid-feedback"
+                             th:errors="*{quantity}" th:if="${#fields.hasErrors('quantity')}">
+                        </div>
+                    </div>
+                    <div class="col-md-6 offset-md-3 mb-3">
+                        <label th:for="${#ids.next('category')}">Category</label>
+                        <select class="form-control" required th:field="*{category}">
+                            <option selected value="">Choose...</option>
+                            <option th:each="category : ${categories}"
+                                    th:text="${category.name}"
+                                    th:value="${category.name}"></option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Category is required
+                        </div>
+                        <div class="server-invalid-feedback"
+                             th:errors="*{category}" th:if="${#fields.hasErrors('category')}">
+                        </div>
+                    </div>
+                    <div class="col-md-6 offset-md-3 mb-3">
+                        <label th:for="${#ids.next('description')}">Description</label>
+                        <textarea class="form-control" required rows="3" th:field="*{description}"></textarea>
+                        <div class="invalid-feedback">
+                            Description is required
+                        </div>
+                        <div class="server-invalid-feedback"
+                             th:errors="*{description}" th:if="${#fields.hasErrors('description')}">
+                        </div>
+                    </div>
+                    <div class="col-md-6 offset-md-3 mb-3">
+                        <label th:for="${#ids.next('cover')}">Book cover</label>
+                        <input class="form-control-file" required th:field="*{cover}" type="file">
+                        <div class="invalid-feedback">
+                            Cover is required
+                        </div>
+                        <div class="server-invalid-feedback"
+                             th:errors="*{cover}" th:if="${#fields.hasErrors('cover')}">
+                        </div>
+                    </div>
+                    <div class="col-md-6 offset-md-3 mb-3">
+                        <button class="btn btn-primary float-right" type="submit">Add</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</th:block>
+<th:block th:replace="admin/fragments/common :: scripts"/>
+</body>
+</html>

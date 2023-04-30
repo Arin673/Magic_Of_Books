@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/common :: head(~{::title}, ~{}, ${_csrf})">
+    <title>Orders</title>
+</head>
+<body>
+<th:block th:replace="admin/fragments/common :: main('orders', ~{::main})">
+    <main class="col-md-9 ml-sm-auto col-lg-10 px-4" role="main">
+        <div class="table-responsive pt-3 pb-2">
+            <table class="table table-hover table-sm">
+                <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Total Amount</th>
+                    <th>Creation Date</th>
+                    <th>Customer ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Address</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>Zip</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${order.id}"></td>
+                    <td th:text="${'$' + order.totalAmount}"></td>
+                    <td th:text="${#dates.format(order.creationDate, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td th:text="${order.customer.id}"></td>
+                    <td th:text="${order.customer.firstName}"></td>
+                    <td th:text="${order.customer.lastName}"></td>
+                    <td th:text="${order.customer.address}"></td>
+                    <td th:text="${order.customer.country}"></td>
+                    <td th:text="${order.customer.state}"></td>
+                    <td th:text="${order.customer.zip}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</th:block>
+<th:block th:replace="admin/fragments/common :: scripts"/>
+</body>
+</html>

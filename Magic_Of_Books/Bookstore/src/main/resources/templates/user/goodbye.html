@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="user/fragments/common :: head(~{::title}, ~{}, ${_csrf})">
+    <title>Goodbye</title>
+</head>
+<body>
+<th:block th:replace="user/fragments/common :: main(${categories}, ~{::main})">
+    <main class="container" role="main">
+        <div class="row">
+            <div class="col-12" style="height: 100px; line-height: 100px">
+                <p class="text-center">Your order has been successfully processed and will be delivered within a short
+                    period of time. <br/> Thank you for shopping with Bookstore.com</p>
+            </div>
+        </div>
+    </main>
+</th:block>
+<th:block th:replace="user/fragments/common :: scripts"/>
+</body>
+</html>

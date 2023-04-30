@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head(title, links, _csrf)">
+    <title th:replace="${title}">Title</title>
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/common.css}">
+
+    <th:block th:replace="${links}"/>
+</head>
+
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow" th:fragment="navbar">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#" th:href="@{/}">Bookstore</a>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <form action="#" class="form-inline" method="post" th:action="@{/admin/logout}">
+                <button class="btn btn-link nav-link" type="submit">Sign out</button>
+            </form>
+        </li>
+    </ul>
+</nav>
+
+<nav class="col-md-2 d-none d-md-block bg-light sidebar" th:fragment="sidebar(${currentPage})">
+    <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:classappend="${currentPage == 'dashboard'} ? 'active' : ''"
+                   th:href="@{/admin/dashboard}">
+                    <span data-feather="home"></span>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:classappend="${currentPage == 'books'}  ? 'active' : ''"
+                   th:href="@{/admin/books}">
+                    <span data-feather="book"></span>
+                    Books
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:classappend="${currentPage == 'categories'}  ? 'active' : ''"
+                   th:href="@{/admin/categories}">
+                    <span data-feather="menu"></span>
+                    Categories
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:classappend="${currentPage == 'orders'} ? 'active' : ''"
+                   th:href="@{/admin/orders}">
+                    <span data-feather="file"></span>
+                    Orders
+                </a>
+            </li>
+        </ul>
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Actions</span>
+        </h6>
+        <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/admin/new-book}">
+                    <span data-feather="plus"></span>
+                    New Book
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<th:block th:fragment="main(currentPage, main)">
+    <nav th:replace="admin/fragments/common :: navbar"></nav>
+    <div class="container-fluid">
+        <div class="row">
+            <nav th:replace="admin/fragments/common :: sidebar(currentPage)"></nav>
+            <th:block th:replace="${main}"/>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:fragment="scripts">
+    <script th:src="@{/webjars/jquery/jquery.min.js}" type="text/javascript"></script>
+    <script th:src="@{/webjars/popper.js/umd/popper.min.js}" type="text/javascript"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/webjars/feather-icons/dist/feather.min.js}" type="text/javascript"></script>
+    <script type="text/javascript">feather.replace()</script>
+    <script th:src="@{/webjars/holderjs/holder.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/admin/common.js}" type="text/javascript"></script>
+</th:block>
+
+</html>

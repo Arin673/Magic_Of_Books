@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="user/fragments/common :: head(~{::title}, ~{}, ${_csrf})">
+    <title>Checkout</title>
+</head>
+<body>
+<th:block th:replace="user/fragments/common :: main(${categories}, ~{::main})">
+    <main class="container" role="main">
+        <div class="row mt-4">
+            <div class="col-md-4 order-md-2 mb-4">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Your cart</span>
+                    <span class="badge badge-secondary badge-pill" th:text="${cart.itemsNumber}">3</span>
+                </h4>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between lh-condensed"
+                        th:each="item : ${cart.items}">
+                        <div>
+                            <h6 class="my-0" th:text="${item.book.title}">Product name</h6>
+                            <small class="text-muted" th:text="${'by ' + item.book.author}">Brief description</small>
+                        </div>
+                        <span class="text-muted" th:text="${'$' + item.totalPrice}">$12</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total (USD)</span>
+                        <strong th:text="${'$' + cart.totalPrice}">$20</strong>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-8 order-md-1 mb-4">
+                <h4 class="mb-3">Billing address</h4>
+                <form action="#" class="needs-validation" method="post" novalidate th:action="@{/pay}"
+                      th:object="${billingForm}">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label th:for="${#ids.next('firstName')}">First name</label>
+                            <input class="form-control" placeholder="" required
+                                   th:field="*{firstName}"
+                                   type="text">
+                            <div class="invalid-feedback">
+                                Valid first name is required.
+                            </div>
+                            <div class="server-invalid-feedback"
+                                 th:errors="*{firstName}" th:if="${#fields.hasErrors('firstName')}">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label th:for="${#ids.next('lastName')}">Last name</label>
+                            <input class="form-control" placeholder="" required
+                                   th:field="*{lastName}"
+                                   type="text">
+                            <div class="invalid-feedback">
+                                Valid last name is required.
+                            </div>
+                            <div class="server-invalid-feedback"
+                                 th:errors="*{lastName}" th:if="${#fields.hasErrors('lastName')}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label th:for="${#ids.next('address')}">Address</label>
+                        <input class="form-control" placeholder="1234 Main St" required
+                               th:field="*{address}"
+                               type="text">
+                        <div class="invalid-feedback">
+                            Please enter your shipping address.
+                        </div>
+                        <div class="server-invalid-feedback"
+                             th:errors="*{address}" th:if="${#fields.hasErrors('address')}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label th:for="${#ids.next('country')}">Country</label>
+                            <select class="custom-select d-block w-100" required
+                                    th:field="*{country}">
+                                <option value="">Choose...</option>
+                                <option value="United States">United States</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a valid country.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label th:for="${#ids.next('state')}">State</label>
+                            <select class="custom-select d-block w-100" required
+                                    th:field="*{state}">
+                                <option value="">Choose...</option>
+                                <option value="California">California</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid state.
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label th:for="${#ids.next('zip')}">Zip</label>
+                            <input class="form-control" placeholder="" required
+                                   th:field="*{zip}"
+                                   type="text">
+                            <div class="invalid-feedback">
+                                Zip code required.
+                            </div>
+                            <div class="server-invalid-feedback"
+                                 th:errors="*{zip}" th:if="${#fields.hasErrors('zip')}">
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mb-4">
+                    <div class="custom-control custom-checkbox">
+                        <input class="custom-control-input" th:field="*{shippingAddressMatchesBillingAddress}"
+                               type="checkbox">
+                        <label class="custom-control-label"
+                               th:for="${#ids.prev('shippingAddressMatchesBillingAddress')}">Shipping address is the
+                            same as my billing address</label>
+                    </div>
+                    <hr class="mb-4">
+
+                    <h4 class="mb-3">Payment</h4>
+
+                    <div class="d-block my-3">
+                        <div class="custom-control custom-radio">
+                            <input class="custom-control-input" required
+                                   th:field="*{paymentType}"
+                                   th:value="${T(com.bookstore.web.ui.form.PaymentType).CREDIT}"
+                                   type="radio" value="credit">
+                            <label class="custom-control-label" th:for="${#ids.prev('paymentType')}">Credit card</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input class="custom-control-input" required
+                                   th:field="*{paymentType}"
+                                   th:value="${T(com.bookstore.web.ui.form.PaymentType).DEBIT}"
+                                   type="radio" value="debit">
+                            <label class="custom-control-label" th:for="${#ids.prev('paymentType')}">Debit card</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input class="custom-control-input" required
+                                   th:field="*{paymentType}"
+                                   th:value="${T(com.bookstore.web.ui.form.PaymentType).PAYPAL}"
+                                   type="radio" value="paypal">
+                            <label class="custom-control-label" th:for="${#ids.prev('paymentType')}">PayPal</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label th:for="${#ids.next('card.name')}">Name on card</label>
+                            <input class="form-control" placeholder="" required
+                                   th:field="*{card.name}"
+                                   type="text">
+                            <small class="text-muted">Full name as displayed on card</small>
+                            <div class="invalid-feedback">
+                                Name on card is required
+                            </div>
+                            <div class="server-invalid-feedback"
+                                 th:errors="*{card.name}" th:if="${#fields.hasErrors('card.name')}">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label th:for="${#ids.next('card.number')}">Credit card number</label>
+                            <input class="form-control" placeholder="" required
+                                   th:field="*{card.number}"
+                                   type="text">
+                            <div class="invalid-feedback">
+                                Credit card number is required
+                            </div>
+                            <div class="server-invalid-feedback"
+                                 th:errors="*{card.number}" th:if="${#fields.hasErrors('card.number')}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label th:for="${#ids.next('card.expiration')}">Expiration</label>
+                            <input class="form-control" placeholder="" required
+                                   th:field="*{card.expiration}"
+                                   type="text">
+                            <div class="invalid-feedback">
+                                Expiration date required
+                            </div>
+                            <div class="server-invalid-feedback"
+                                 th:errors="*{card.expiration}" th:if="${#fields.hasErrors('card.expiration')}">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label th:for="${#ids.next('card.cvv')}">CVV</label>
+                            <input class="form-control" placeholder="" required
+                                   th:field="*{card.cvv}"
+                                   type="text">
+                            <div class="invalid-feedback">
+                                Security code required
+                            </div>
+                            <div class="server-invalid-feedback"
+                                 th:errors="*{card.cvv}" th:if="${#fields.hasErrors('card.cvv')}">
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mb-4">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</th:block>
+<th:block th:replace="user/fragments/common :: scripts"/>
+</body>
+</html>

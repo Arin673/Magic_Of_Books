@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/common :: head(~{::title}, ~{}, ${_csrf})">
+    <title>Categories</title>
+</head>
+<body>
+<th:block th:replace="admin/fragments/common :: main('categories', ~{::main})">
+    <main class="col-md-9 ml-sm-auto col-lg-10 px-4" role="main">
+        <div class="table-responsive pt-3 pb-2" sec:authorize="hasRole('ADMIN')">
+            <table class="table table-hover table-sm">
+                <thead>
+                <tr>
+                    <th>Category ID</th>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="category : ${categories}">
+                    <td th:text="${category.id}"></td>
+                    <td th:text="${category.name}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive" sec:authorize="hasRole('SUPER_ADMIN')">
+            <table class="table table-hover table-sm">
+                <thead>
+                <tr>
+                    <th>Category ID</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="category : ${categories}">
+                    <td th:text="${category.id}"></td>
+                    <td th:text="${category.name}"></td>
+                    <td>
+                        <form action="#" method="post"
+                              th:action="@{/admin/categories/delete}">
+                            <input name="id" th:value="${category.id}" type="hidden"/>
+                            <button class="btn btn-sm btn-outline-primary my-2 my-sm-0" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</th:block>
+<th:block th:replace="admin/fragments/common :: scripts"/>
+</body>
+</html>
